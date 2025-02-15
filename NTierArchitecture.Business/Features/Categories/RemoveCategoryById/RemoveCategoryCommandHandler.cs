@@ -2,7 +2,7 @@
 using NTierArchitecture.Entities.Models;
 using NTierArchitecture.Entities.Repositories;
 
-namespace NTierArchitecture.Business.Features.Categories.RemoveCategory;
+namespace NTierArchitecture.Business.Features.Categories.RemoveCategoryById;
 
 internal sealed class RemoveCategoryCommandHandler : IRequestHandler<RemoveCategoryByIdCommand>
 {
