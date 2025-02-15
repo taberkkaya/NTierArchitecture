@@ -5,6 +5,7 @@ using NTierArchitecture.DataAccess.Context;
 using NTierArchitecture.DataAccess.Repositories;
 using NTierArchitecture.Entities.Models;
 using NTierArchitecture.Entities.Repositories;
+using Scrutor;
 
 namespace NTierArchitecture.DataAccess;
 
@@ -27,9 +28,12 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork>(sv => sv.GetRequiredService<ApplicationDbContext>());
 
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+        services.Scan(selector =>
+             selector.FromAssemblies(typeof(DependencyInjection).Assembly)
+                     .AddClasses(publicOnly: false)
+                     .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+                     .AsMatchingInterface()
+                     .WithScopedLifetime());
 
         return services;
     }
