@@ -14,7 +14,7 @@ internal sealed class MappingProfile : Profile
         CreateMap<CreateProductCommand, Product>();
         CreateMap<UpdateProductCommand, Product>();
 
-        CreateMap<CreateCategoryCommand, Product>();
-        CreateMap<UpdateCategoryCommand, Product>();
+        CreateMap<CreateCategoryCommand, Category>();
+        CreateMap<UpdateCategoryCommand, Category>();
     }
 }

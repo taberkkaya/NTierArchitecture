@@ -7,4 +7,4 @@ public sealed record CreateProductCommand(
     decimal Price,
     int Quantity,
     Guid CategoryId
-    ) : IRequest;
+    ) : IRequest<Unit>;
