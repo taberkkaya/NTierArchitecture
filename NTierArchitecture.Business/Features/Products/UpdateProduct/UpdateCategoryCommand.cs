@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace NTierArchitecture.Business.Features.Products.UpdateCategory;
+namespace NTierArchitecture.Business.Features.Products.UpdateProduct;
 
-public sealed record UpdateCategoryCommand(
+public sealed record UpdateProductCommand(
     Guid Id,
     string Name,
     decimal Price,

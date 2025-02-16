@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using NTierArchitecture.Entities.Models;
 using NTierArchitecture.Entities.Repositories;
 
@@ -8,10 +9,12 @@ internal sealed class CreateProductCommandHandler : IRequestHandler<CreateProduc
 {
     private readonly IProductRepository _productRepository;
     private readonly IUnitOfWork _unitOfWork;
-    public CreateProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper;
+    public CreateProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper)
     {
         _productRepository = productRepository;
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -21,13 +24,7 @@ internal sealed class CreateProductCommandHandler : IRequestHandler<CreateProduc
             throw new ArgumentException("Product name is exist.");
         }
 
-        Product product = new()
-        {
-            Name = request.Name,
-            Price = request.Price,
-            Quantity = request.Quantity,
-            CategoryId = request.CategoryId
-        };
+        Product product = _mapper.Map<Product>(request);
 
         await _productRepository.AddAsync(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

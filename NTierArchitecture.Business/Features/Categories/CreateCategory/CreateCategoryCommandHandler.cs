@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using NTierArchitecture.Entities.Models;
 using NTierArchitecture.Entities.Repositories;
 
@@ -10,10 +11,12 @@ internal sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCateg
     private readonly ICategoryRepository _categoryRepository;
 
     private readonly IUnitOfWork _unitOfWork;
-    public CreateCategoryCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper;
+    public CreateCategoryCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, IMapper mapper)
     {
         _categoryRepository = categoryRepository;
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
@@ -26,10 +29,7 @@ internal sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCateg
             throw new ArgumentException("Category name is exist.");
         }
 
-        Category category = new()
-        {
-            Name = request.Name
-        };
+        Category category = _mapper.Map<Category>(request);
 
         await _categoryRepository.AddAsync(category,cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

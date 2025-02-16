@@ -1,20 +1,23 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using NTierArchitecture.Entities.Models;
 using NTierArchitecture.Entities.Repositories;
 
-namespace NTierArchitecture.Business.Features.Products.UpdateCategory;
+namespace NTierArchitecture.Business.Features.Products.UpdateProduct;
 
-internal sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand>
+internal sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateProductCommand>
 {
     private readonly IProductRepository _productRepository;
     private readonly IUnitOfWork _unitOfWork;
-    public UpdateCategoryCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper;
+    public UpdateCategoryCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper)
     {
         _productRepository = productRepository;
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
-    public async Task Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         Product product = await _productRepository.GetByIdAsync(p => p.Id == request.Id, cancellationToken);
         if (product is null)
@@ -31,10 +34,7 @@ internal sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCateg
             }
         }
 
-        product.Name = request.Name;
-        product.Price = request.Price;
-        product.Quantity = request.Quantity;    
-        product.CategoryId = request.CategoryId;
+        _mapper.Map(request,product);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
