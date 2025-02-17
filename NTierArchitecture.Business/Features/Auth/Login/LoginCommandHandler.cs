@@ -1,20 +1,22 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NTierArchitecture.Entities.Abstractions;
 using NTierArchitecture.Entities.Models;
 
 namespace NTierArchitecture.Business.Features.Auth.Login;
 
-internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, Unit>
+internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandResponse>
 {
     private readonly UserManager<AppUser> _userManager;
-
-    public LoginCommandHandler(UserManager<AppUser> userManager)
+    private readonly IJwtProvider _jwtProvider;
+    public LoginCommandHandler(UserManager<AppUser> userManager, IJwtProvider jwtProvider)
     {
         _userManager = userManager;
+        _jwtProvider = jwtProvider;
     }
 
-    public async Task<Unit> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginCommandResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         AppUser appUser = await _userManager.Users.Where(p => p.UserName == request.UserNameOrEmail || p.Email == request.UserNameOrEmail).FirstOrDefaultAsync();
 
@@ -29,6 +31,8 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, Unit>
             throw new ArgumentException("Girilen bilgiler hatalı.");
         }
 
-        return Unit.Value;
+        string token = await _jwtProvider.CreateTokenAsync(appUser);
+
+        return new(AccessToken: token, UserId: appUser.Id);
     }
 }

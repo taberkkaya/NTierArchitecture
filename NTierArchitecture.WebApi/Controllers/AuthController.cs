@@ -22,8 +22,8 @@ public class AuthController : ApiController
     [HttpPost]
     public async Task<IActionResult> Login(LoginCommand request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(request, cancellationToken);
-        return NoContent();
+        var response = await _mediator.Send(request, cancellationToken);
+        return Ok(response);
     }
 }
 
