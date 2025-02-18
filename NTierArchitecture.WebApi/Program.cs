@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using NTierArchitecture.Business;
 using NTierArchitecture.DataAccess;
 using NTierArchitecture.Entities.Options;
+using NTierArchitecture.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddBusiness();
 builder.Services.AddDataAccess(builder.Configuration);
+
+
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -70,6 +74,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
