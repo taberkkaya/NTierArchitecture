@@ -24,6 +24,7 @@ internal class JwtProvider : IJwtProvider
     {
         Claim[] claims = new Claim[]
         {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim("NameLastname", string.Join(" ",user.Name,user.LastName)),
             new Claim("Email",user.Email)
         };
