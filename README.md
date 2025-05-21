@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon.jpg" alt="NTierArchitecture Logo" width="200" />
+  <img src=".assets/logo.jpg" alt="NTierArchitecture Logo" width="200" />
 </p>
 
 <h1 align="center">NTierArchitecture</h1>
@@ -46,6 +46,16 @@
 ```
 
 ## ⚙️ Getting Started
+
+### 🚀 Installation
+
+To install the template locally, run:
+
+```bash
+dotnet new install NTierArch.StarterKit
+```
+
+Or:
 
 1. Clone the Repository:
 
